@@ -20,6 +20,7 @@
 </head>
 <body>
   <div id="aviso">Autoriza la cámara y apunta al código QR</div>
+
   <a-scene
     mindar-image="imageTargetSrc: ./target.mind;"
     color-space="sRGB"
@@ -34,14 +35,38 @@
     <a-camera position="0 0 0"
               look-controls="enabled: false"></a-camera>
 
-    <a-entity mindar-image-target="targetIndex: 0">
+    <a-entity id="objetivo" mindar-image-target="targetIndex: 0">
       <a-gltf-model
+        id="modelo"
         src="#pocion"
         position="0 0 0"
         rotation="0 0 0"
         scale="0.5 0.5 0.5">
       </a-gltf-model>
+
+      <a-box color="#168BCD"
+             width="0.4" height="0.4" depth="0.4"
+             position="0 0 0.2"></a-box>
     </a-entity>
   </a-scene>
+
+  <script>
+    const aviso = document.getElementById("aviso");
+    const objetivo = document.getElementById("objetivo");
+    const modelo = document.getElementById("modelo");
+
+    objetivo.addEventListener("targetFound", () => {
+      aviso.textContent = "QR detectado";
+    });
+    objetivo.addEventListener("targetLost", () => {
+      aviso.textContent = "QR perdido, apunta de nuevo";
+    });
+    modelo.addEventListener("model-loaded", () => {
+      aviso.textContent = "Modelo cargado. Apunta al QR";
+    });
+    modelo.addEventListener("model-error", () => {
+      aviso.textContent = "Error al cargar pocion.glb";
+    });
+  </script>
 </body>
 </html>
